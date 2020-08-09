@@ -2,5 +2,5 @@
 cfg/*
 
 # ignore files downloaded by pull script
-./custom/ahud*
-./custom/mastercomfig*
+custom/ahud*
+custom/mastercomfig*
