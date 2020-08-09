@@ -12,6 +12,7 @@ done
 
 # mastercom's requires a copy of your class configs to exist under cfg/user/<class config>
 cd ..
+mkdir -p ./cfg/user
 for character in "scout" "soldier" "pyro" "demoman" "heavyweapons" "engineer" "medic" "sniper" "spy"; do
 	cp "custom/my_scripts/cfg/$character.cfg" "cfg/user/$character.cfg"
 done

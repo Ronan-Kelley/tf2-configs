@@ -1,0 +1,13 @@
+# install files to default install location
+directory=""
+
+[ -d ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/ ] && echo "team fortress 2 directory discovered in default location" && directory="~/.steam/steam/steamapps/common/Team\ Fortress\ 2"
+
+[ ! -z "$1" ] && [ -d $1 ] && echo "discovered directory at location provided by user" && directory="$1"
+
+[ -z "$directory" ] && echo "no valid directory found or supplied, exiting" && exit 1
+
+cp -r ./custom "$directory"
+[ -d ./cfg ] && cp -r ./cfg "$directory"
+
+# vim: syntax=sh
