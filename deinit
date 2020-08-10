@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm -rf cfg/User
+rm -rf custom/ahud
+rm -rf custom/mastercomfig*
+
+# vim: syntax=sh
