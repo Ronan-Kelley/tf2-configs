@@ -3,6 +3,7 @@ cd custom
 
 # I use ahud, by Nokk
 git clone https://github.com/n0kk/ahud.git
+find . -name "*.git*" -exec rm -rf {} \;
 
 # I also use mastercom's medium-high preset
 version="$(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | head -n 1 | tr -cd '[[:digit:].]' | sed 's/^.//;s/.$//')"

@@ -7,7 +7,12 @@ directory=""
 
 [ -z "$directory" ] && echo "no valid directory found or supplied, exiting" && exit 1
 
-cp -r ./custom "$directory"
-[ -d ./cfg ] && cp -r ./cfg "$directory"
+directory="$( echo $directory | sed 's/\\//g;s:~:'"$HOME"':' )"
+directory="$directory/tf"
+mkdir -p "$directory/custom"
+mkdir -p "$directory/cfg"
+
+cp -r ./custom/* "$directory/custom/"
+[ -d ./cfg ] && cp -r ./cfg/* "$directory/cfg/"
 
 # vim: syntax=sh
