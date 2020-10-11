@@ -19,6 +19,6 @@ for character in "scout" "soldier" "pyro" "demoman" "heavyweapons" "engineer" "m
 	# necessary to copy class configs to this location for use with mastercom's config
 	cp "custom/my_scripts/cfg/$character.cfg" "cfg/user/$character.cfg"
 	# necessary to replace all calls to "global/<script>" with "user/global/<script>" due to the mastercoms-required location.
-	cat "cfg/user/$character.cfg" | sed 's/global\//user\/global\//g' | tee "cfg/user/$character.cfg"
+	sed -i 's/global\//user\/global\//g' "cfg/user/$character.cfg"
 done
 # vim: syntax=sh
