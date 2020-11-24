@@ -5,9 +5,9 @@ cd custom
 git clone https://github.com/n0kk/ahud.git
 find . -name "*.git*" -exec rm -rf {} \;
 
-# I also use mastercom's medium-high preset
+# I also use mastercom's low preset
 version="$(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | head -n 1 | tr -cd '[[:digit:].]' | sed 's/^.//;s/.$//')"
-for resource in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep "$version" | grep -e "disable-pyroland" -e "medium-high-preset" -e "no-soundscapes" -e "no-tutorial"); do
+for resource in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep "$version" | grep -e "disable-pyroland" -e "low-preset" -e "no-soundscapes" -e "no-tutorial"); do
 	wget "$resource"
 done
 
