@@ -1,24 +1,38 @@
+#!/bin/bash
+
 # move to custom directory
 cd custom
 
-# I use ahud, by Nokk
-git clone https://github.com/n0kk/ahud.git
-find . -name "*.git*" -exec rm -rf {} \;
+function get_hud() {
+    # I use ahud, by Nokk
+    git clone https://github.com/n0kk/ahud.git
+    find . -name "*.git*" -exec rm -rf {} \;
+}
 
-# I also use mastercom's low preset
-version="$(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | head -n 1 | tr -cd '[[:digit:].]' | sed 's/^.//;s/.$//')"
-for resource in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep "$version" | grep -e "disable-pyroland" -e "low-preset" -e "no-soundscapes" -e "no-tutorial"); do
-	wget "$resource"
-done
+function get_fps_config() {
+    # I also use mastercom's low preset
+    version="$(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep -E '[0-9]+' | head -n 1 | sed -r 's/.*\/([0-9.]+)\/.*/\1/')"
+    for resource in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep "$version" | grep -e "disable-pyroland" -e "mastercomfig-low-preset" -e "no-soundscapes" -e "no-tutorial"); do
+        curl $resource -o "$(echo $resource | sed -r 's/.*\/(mastercomfig-.*\.vpk)/\1/')"
+    done
+}
 
-# mastercom's requires a copy of your class configs to exist under cfg/user/<class config>
-cd ..
-mkdir -p ./cfg/user
-cp -r ./custom/my_scripts/cfg/global ./cfg/user/
-for character in "scout" "soldier" "pyro" "demoman" "heavyweapons" "engineer" "medic" "sniper" "spy"; do
-	# necessary to copy class configs to this location for use with mastercom's config
-	cp "custom/my_scripts/cfg/$character.cfg" "cfg/user/$character.cfg"
-	# necessary to replace all calls to "global/<script>" with "user/global/<script>" due to the mastercoms-required location.
-	sed -i 's/global\//user\/global\//g' "cfg/user/$character.cfg"
-done
-# vim: syntax=sh
+function mastercoms_fix() {
+    # mastercom's requires a copy of your class configs to exist under cfg/user/<class config>
+    cd ..
+    mkdir -p ./cfg/user
+    cp -r ./custom/my_scripts/cfg/global ./cfg/user/
+    for character in "scout" "soldier" "pyro" "demoman" "heavyweapons" "engineer" "medic" "sniper" "spy"; do
+        # necessary to copy class configs to this location for use with mastercom's config
+        cp "custom/my_scripts/cfg/$character.cfg" "cfg/user/$character.cfg"
+        # necessary to replace all calls to "global/<script>" with "user/global/<script>" due to the mastercoms-required location.
+        sed -i 's/global\//user\/global\//g' "cfg/user/$character.cfg"
+    done
+}
+
+function main() {
+    get_hud
+    get_fps_config
+    mastercoms_fix
+}
+main
