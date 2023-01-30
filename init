@@ -36,6 +36,7 @@ function get_fps_config() {
     for uri in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4); do
         uris+=("$uri")
     done
+
     # get the most recent version; this should be the first one returned
     # by the github api call. If the first version is non-numerical
     # (such as "dev"), then it will be ignored and the next tried.
@@ -43,6 +44,7 @@ function get_fps_config() {
         version="$(echo $uri | grep -E '[0-9]+' | head -n 1 | sed -r 's/.*\/([0-9.]+)\/.*/\1/')"
         [ ! -z "$version" ] && break
     done
+
     # get list of resources for current version; this could
     # be done at the same time as the version determination,
     # but since this script is not run on a regular basis
