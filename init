@@ -3,22 +3,33 @@
 # move to custom directory
 cd custom
 
+# download my hud into the proper location;
+# I use ahud, by Nokk.
 function get_hud() {
-    # I use ahud, by Nokk
-    git clone https://github.com/n0kk/ahud.git
-    find . -name "*.git*" -exec rm -rf {} \;
+    # check for hud already being downloaded;
+    # remember that this function expects to be run from ./custom
+    if [ ! -f ahud ]; then
+        # clone the hud's files into custom
+        git clone https://github.com/n0kk/ahud.git
+        # since this function is run with ./custom as its working
+        # directory, this does not destroy the tf2-configs git
+        # configuration.
+        find . -name "*.git*" -exec rm -rf {} \; 2>/dev/null
+    fi
 }
 
+# download an fps config;
+# I use mastercom's low preset.
 function get_fps_config() {
-    # I also use mastercom's low preset
     version="$(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep -E '[0-9]+' | head -n 1 | sed -r 's/.*\/([0-9.]+)\/.*/\1/')"
     for resource in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep "$version" | grep -e "disable-pyroland" -e "mastercomfig-low-preset" -e "no-soundscapes" -e "no-tutorial"); do
         curl $resource -o "$(echo $resource | sed -r 's/.*\/(mastercomfig-.*\.vpk)/\1/')"
     done
 }
 
+# mastercomfig requires your class configs to exist under cfg/user/ instead of just cfg/;
+# this function will copy the configs into the ./cfg/user directory
 function mastercoms_fix() {
-    # mastercom's requires a copy of your class configs to exist under cfg/user/<class config>
     cd ..
     mkdir -p ./cfg/user
     cp -r ./custom/my_scripts/cfg/global ./cfg/user/
