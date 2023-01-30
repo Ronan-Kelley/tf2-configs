@@ -21,9 +21,30 @@ function get_hud() {
 # download an fps config;
 # I use mastercom's low preset.
 function get_fps_config() {
-    version="$(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep -E '[0-9]+' | head -n 1 | sed -r 's/.*\/([0-9.]+)\/.*/\1/')"
-    for resource in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4 | grep "$version" | grep -e "disable-pyroland" -e "mastercomfig-low-preset" -e "no-soundscapes" -e "no-tutorial"); do
-        curl $resource -o "$(echo $resource | sed -r 's/.*\/(mastercomfig-.*\.vpk)/\1/')"
+    # get all release URIs from github
+    # an array is used here to preserve line formatting
+    uris=()
+    for uri in $(curl -s https://api.github.com/repos/mastercomfig/mastercomfig/releases | grep browser_ | cut -d\" -f4); do
+        uris+=("$uri")
+    done
+    # get the most recent version; this should be the first one returned
+    # by the github api call. If the first version is non-numerical
+    # (such as "dev"), then it will be ignored and the next tried.
+    for uri in ${uris[*]}; do
+        version="$(echo $uri | grep -E '[0-9]+' | head -n 1 | sed -r 's/.*\/([0-9.]+)\/.*/\1/')"
+        [ ! -z "$version" ] && break
+    done
+    # get list of resources for current version; this could
+    # be done at the same time as the version determination,
+    # but since this script is not run on a regular basis
+    # I prefer the seperation for readability.
+    for uri in ${uris[*]}; do
+        # this could check to see if the version has decremented and stop;
+        # this script should run seldom enough that the short increase in
+        # runtime is unimportant.
+        if [ ! -z "$(echo $uri | grep "$version" | grep -e "disable-pyroland" -e "mastercomfig-low-preset" -e "no-soundscapes" -e "no-tutorial")" ]; then
+            curl $uri -o "$(echo $uri | sed -r 's/.*\/(mastercomfig-.*\.vpk)/\1/')"
+        fi
     done
 }
 
@@ -42,8 +63,8 @@ function mastercoms_fix() {
 }
 
 function main() {
-    get_hud
+    # get_hud
     get_fps_config
-    mastercoms_fix
+    # mastercoms_fix
 }
 main
