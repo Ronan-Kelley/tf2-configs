@@ -63,8 +63,8 @@ function mastercoms_fix() {
 }
 
 function main() {
-    # get_hud
+    get_hud
     get_fps_config
-    # mastercoms_fix
+    mastercoms_fix
 }
 main
