@@ -8,7 +8,7 @@ cd custom
 function get_hud() {
     # check for hud already being downloaded;
     # remember that this function expects to be run from ./custom
-    if [ ! -f ahud ]; then
+    if [ ! -d ahud ]; then
         # clone the hud's files into custom
         git clone https://github.com/n0kk/ahud.git
         # since this function is run with ./custom as its working
