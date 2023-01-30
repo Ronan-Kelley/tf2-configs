@@ -21,6 +21,15 @@ function get_hud() {
 # download an fps config;
 # I use mastercom's low preset.
 function get_fps_config() {
+    # only run if the files aren't already there; note that this
+    # does not take into account version differences.
+    if [ -f mastercomfig-disable-pyroland-addon.vpk ]\
+        && [ -f mastercomfig-no-soundscapes-addon.vpk ]\
+        && [ -f mastercomfig-no-tutorial-addon.vpk ]\
+        && [ -f mastercomfig-low-preset.vpk ]; then
+        return
+    fi
+
     # get all release URIs from github
     # an array is used here to preserve line formatting
     uris=()
