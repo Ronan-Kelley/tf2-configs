@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf cfg/User
+rm -rf cfg
 rm -rf custom/ahud
 rm -rf custom/mastercomfig*
 

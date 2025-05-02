@@ -1,18 +1,19 @@
 # install files to default install location
 directory=""
 
-[ -d ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/ ] && echo "team fortress 2 directory discovered in default location" && directory="~/.steam/steam/steamapps/common/Team\ Fortress\ 2"
+[ -z "$1" ] && [ -d "~/.steam/steam/steamapps/common/Team Fortress 2/" ] && echo "team fortress 2 directory discovered in default location" && directory="~/.steam/steam/steamapps/common/Team Fortress 2"
 
-[ ! -z "$1" ] && [ -d $1 ] && echo "discovered directory at location provided by user" && directory="$1"
+[ ! -z "$1" ] && [ -d "$1" ] && echo "discovered directory at location provided by user" && directory="$1"
 
-[ -z "$directory" ] && echo "no valid directory found or supplied, exiting" && exit 1
+[ -z "${directory}" ] && echo "no valid directory found or supplied, exiting" && exit 1
 
 directory="$( echo $directory | sed 's/\\//g;s:~:'"$HOME"':' )"
-directory="$directory/tf"
-mkdir -p "$directory/custom"
-mkdir -p "$directory/cfg"
+directory="${directory}/tf"
+mkdir -p "${directory}/custom"
+mkdir -p "${directory}/cfg"
 
-cp -r ./custom/* "$directory/custom/"
-[ -d ./cfg ] && cp -r ./cfg/* "$directory/cfg/"
+cp -r ./custom/* "${directory}/custom/"
+cp -r ./cfg/overrides/ "${directory}/overrides/"
+[ -d ./cfg ] && cp -r ./cfg/* "${directory}/cfg/"
 
 # vim: syntax=sh
